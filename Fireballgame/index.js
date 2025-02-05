@@ -4,6 +4,37 @@ const ctx = canvas.getContext ("2d");
 canvas.height = 512;
 canvas.width = 448;
 
+let colors = ["#CD5C5C", "#F08080", "#FA8072", "#E9967A", "#8B0000"]
+
+const filas = 6 
+const columnes = 12;
+const ampleMur = 30;
+const alturaMur = 14;
+const margeTMur = 80;
+const margeEMur = 30;
+const sepMurs = 2;
+
+const murs = []
+const ESTAT_MUR = {
+    DESTRUIT: 0,
+    SHOW: 1
+}
+
+for(let c=0; c<columnes; c++){
+    murs [c] = [];
+    for (let f=0; f<filas; f++){
+        const murX = margeEMur+c*(ampleMur+sepMurs)
+        const murY = margeTMur+f*(alturaMur+sepMurs)
+        murs  [c][f] = {
+            x: murX,
+            y: murY,
+            status: ESTAT_MUR.SHOW,
+            color: colors,
+
+        }
+    }
+}
+
 let radiPilota = 12;
 
 let x = canvas.width / 2
@@ -22,6 +53,7 @@ let esquerra = false;
 let palaX = (canvas.width - amplePala) / 2 ;
 let palaY = canvas.height - alturaPala - 10 ;
 
+let vidas = 3
 
 function pintarPilota (){
     ctx.beginPath();
@@ -36,26 +68,50 @@ function pintarPala (){
     ctx.fillStyle = " #e53800  ";
     ctx.fillRect (palaX, palaY,amplePala, alturaPala);
 }
-function pintarMurs (){
 
+function pintarMurs (){
+    for(let c=0; c<columnes; c++){
+        for (let f=0; f<filas; f++){
+            const murActual = murs[c][f];
+            if (murActual.status == ESTAT_MUR.DESTRUIT){
+                continue;
+            }
+            ctx.fillStyle = murActual.color;
+            ctx.rect(murActual.x,murActual.y,ampleMur,alturaMur)
+            ctx.fill();
+        }
+    }
 }
 function deteccioColisio (){
 
 }
 
 function movimentPilota (){
-    if (x + dx >= canvas.width || x + dx <= 0){
+    if(x + dx >= canvas.width || x + dx <= 0){
         dx = -dx
     }
-    if (y + dy <= 0){
+    if(y + dy <= 0){
         dy = -dy
     }
-    if (y + dy > canvas.height){
-        console.log ("GAME OVER")
-        document.location.reload ();
+
+    if( y == palaY && x >= palaX && x <= palaX+amplePala){
+        dy = -dy
+    }else if(y > canvas.height){
+        vidas--
+    
+        if(vidas == 0){
+            console.log("GAME OVER")
+            document.location.reload();
+        }
+        dx = 2;
+        dy = -2
+        x = canvas.width / 2
+        y = canvas.height - 30
     }
+        
+    
     x += dx;
-    y +=dy;
+    y += dy;
 }
 
 function movimentPala (){
@@ -75,6 +131,15 @@ function borrarPantalla(){
 function inicialitzadorEvents (){
     document.addEventListener ('keydown', pulsar);
     document.addEventListener ('keyup', soltar);
+
+    function soltar(event){
+        if (event.key == 'ArrowRight' || event.key == 'd'){
+            dreta = false;
+        }
+        if (event.key == 'ArrowLeft' || event.key == 'a'){
+            esquerra = false;
+        }
+}
 
     function pulsar (event){
         if (event.key == 'ArrowRight' || event.key == 'd'){
@@ -113,14 +178,6 @@ function inicialitzadorEvents (){
             },3000)
     }
 
-    function soltar (event){
-        if (event.key == 'ArrowRight' || event.key == 'd'){
-            dreta = false;
-        }
-        if (event.key == 'ArrowLeft' || event.key == 'a'){
-            esquerra = false;
-        }
-}
 }
 }
 
@@ -133,7 +190,7 @@ function pintarCanvas(){
     deteccioColisio();
     movimentPilota();
     movimentPala();
-
+    ctx.fillText("Vidas: " +vidas ,12,12);
     window.requestAnimationFrame(pintarCanvas);
 }
 pintarCanvas();
