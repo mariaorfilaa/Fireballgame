@@ -4,6 +4,9 @@ const ctx = canvas.getContext ("2d");
 canvas.height = 512;
 canvas.width = 448;
 
+const sprite = document.getElementById ("sprite");
+const mur = document.getElementById ("murs")
+
 let colors = ["#CD5C5C", "#F08080", "#FA8072", "#E9967A", "#8B0000"]
 
 const filas = 6 
@@ -23,13 +26,14 @@ const ESTAT_MUR = {
 for(let c=0; c<columnes; c++){
     murs [c] = [];
     for (let f=0; f<filas; f++){
+        let r  = Math.floor(Math.random()*3)
         const murX = margeEMur+c*(ampleMur+sepMurs)
         const murY = margeTMur+f*(alturaMur+sepMurs)
         murs  [c][f] = {
             x: murX,
             y: murY,
             status: ESTAT_MUR.SHOW,
-            color: colors,
+            color: r,
 
         }
     }
@@ -65,8 +69,19 @@ function pintarPilota (){
 
 
 function pintarPala (){
-    ctx.fillStyle = " #e53800  ";
-    ctx.fillRect (palaX, palaY,amplePala, alturaPala);
+    //ctx.fillStyle = " #e53800  ";
+    //ctx.fillRect (palaX, palaY,amplePala, alturaPala);
+    ctx.drawImage(
+        sprite,
+        450,
+        350,
+        amplePala,
+        alturaPala,
+        palaX,
+        palaY,
+        amplePala,
+        alturaPala
+    )
 }
 
 function pintarMurs (){
@@ -76,9 +91,21 @@ function pintarMurs (){
             if (murActual.status == ESTAT_MUR.DESTRUIT){
                 continue;
             }
-            ctx.fillStyle = murActual.color;
-            ctx.rect(murActual.x,murActual.y,ampleMur,alturaMur)
-            ctx.fill();
+            let clipX = murActual.color * 150
+            ctx.drawImage(
+                mur,
+                clipX,
+                0,
+                100,
+                100,
+                murActual.x,
+                murActual.y,
+                ampleMur,
+                alturaMur
+            )
+            //ctx.fillStyle = murActual.color;
+           // ctx.rect(murActual.x,murActual.y,ampleMur,alturaMur)
+            //ctx.fill();
         }
     }
 }
