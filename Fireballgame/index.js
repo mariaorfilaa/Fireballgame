@@ -73,10 +73,10 @@ function pintarPala (){
     //ctx.fillRect (palaX, palaY,amplePala, alturaPala);
     ctx.drawImage(
         sprite,
-        450,
-        350,
-        amplePala,
-        alturaPala,
+        0,
+        0,
+        1012,
+        289,
         palaX,
         palaY,
         amplePala,
@@ -91,13 +91,13 @@ function pintarMurs (){
             if (murActual.status == ESTAT_MUR.DESTRUIT){
                 continue;
             }
-            let clipX = murActual.color * 150
+            let clipX = murActual.color * 111
             ctx.drawImage(
                 mur,
                 clipX,
                 0,
-                100,
-                100,
+                72,
+                90,
                 murActual.x,
                 murActual.y,
                 ampleMur,
@@ -109,8 +109,22 @@ function pintarMurs (){
         }
     }
 }
-function deteccioColisio (){
-
+function deteccioColisio () {
+    for(let c=0; c<columnes; c++){
+        for (let f=0; f<filas; f++){
+            const murActual = murs[c][f];
+            if (murActual.status == ESTAT_MUR.DESTRUIT){
+                continue;
+            }
+            
+            //const mateixaXMur = x = palax && x >=;
+            //const mataiexaYMur = y = palaY && x >= palaX && x <= palaX+amplePala;
+            if (mateixaXMur && mataiexaYMur){
+                dy = -dy;
+                murActual.status = ESTAT_MUR.DESTRUIT
+            }
+        }
+    }
 }
 
 function movimentPilota (){
