@@ -5,6 +5,7 @@ body{
 }
 canvas{
     background-image: url(img/fondo.avif);
+    background-size:cover;
     border: 8px solid rgb(224, 78, 25);
     margin: 0 auto;
     display: block;
@@ -16,7 +17,7 @@ h1{
     font-size: 40px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: rgb(109, 29, 0);
-
+    text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 11px #f80, 2px -18px 18px #f20;
 }
 h3{
     margin: 0 auto;

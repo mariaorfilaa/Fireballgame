@@ -5,7 +5,9 @@ canvas.height = 512;
 canvas.width = 448;
 
 const sprite = document.getElementById ("sprite");
-const mur = document.getElementById ("murs")
+const mur = document.getElementById ("murs");
+const ball = document.getElementById ("balls")
+
 
 let colors = ["#CD5C5C", "#F08080", "#FA8072", "#E9967A", "#8B0000"]
 
@@ -39,7 +41,7 @@ for(let c=0; c<columnes; c++){
     }
 }
 
-let radiPilota = 12;
+let radiPilota = 8;
 
 let x = canvas.width / 2
 let y = canvas.height - 30
@@ -47,8 +49,8 @@ let y = canvas.height - 30
 let dx = 4
 let dy = -4
 
-let amplePala = 50;
-let alturaPala = 10;
+let amplePala = 90;
+let alturaPala = 20;
 
 let sensibilitat = 8;
 let dreta = false;
@@ -62,9 +64,19 @@ let vidas = 3
 function pintarPilota (){
     ctx.beginPath();
     ctx.arc(x, y, radiPilota, 0, Math.PI*2);
-    ctx.fillStyle = "#FFF";
+    /*ctx.fillStyle = "#FFF";
     ctx.fill ();
     ctx.closePath();
+    */
+    ctx.drawImage(
+        ball,
+        0,
+        0,
+        360,
+        360,
+    
+    )
+
 }
 
 
@@ -117,11 +129,14 @@ function deteccioColisio () {
                 continue;
             }
             
-            //const mateixaXMur = x = palax && x >=;
-            //const mataiexaYMur = y = palaY && x >= palaX && x <= palaX+amplePala;
+            const mateixaXMur = x > murActual.x && x < murActual.x + ampleMur
+            const mataiexaYMur = y >murActual.y && y < murActual.y + alturaMur
             if (mateixaXMur && mataiexaYMur){
                 dy = -dy;
                 murActual.status = ESTAT_MUR.DESTRUIT
+                
+                var audio = document.getElementById("music");
+                audio.play();
             }
         }
     }
@@ -148,8 +163,7 @@ function movimentPilota (){
         dy = -2
         x = canvas.width / 2
         y = canvas.height - 30
-    }
-        
+    } 
     
     x += dx;
     y += dy;
@@ -161,7 +175,6 @@ function movimentPala (){
     }else if (esquerra && palaX > 0){
         palaX -= sensibilitat
     }
-
 }
 
 function borrarPantalla(){
@@ -218,7 +231,6 @@ function inicialitzadorEvents (){
 
             },3000)
     }
-
 }
 }
 
