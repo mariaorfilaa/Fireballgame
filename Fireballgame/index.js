@@ -41,10 +41,10 @@ for(let c=0; c<columnes; c++){
     }
 }
 
-let radiPilota = 8;
+let radiPilota = 12;
 
 let x = canvas.width / 2
-let y = canvas.height - 30
+let y = canvas.height - 35
 
 let dx = 4
 let dy = -4
@@ -62,9 +62,9 @@ let palaY = canvas.height - alturaPala - 10 ;
 let vidas = 3
 
 function pintarPilota (){
-    ctx.beginPath();
+    /*ctx.beginPath();
     ctx.arc(x, y, radiPilota, 0, Math.PI*2);
-    /*ctx.fillStyle = "#FFF";
+    ctx.fillStyle = "#FFF";
     ctx.fill ();
     ctx.closePath();
     */
@@ -74,7 +74,10 @@ function pintarPilota (){
         0,
         360,
         360,
-    
+        x,
+        y,
+        24,
+        24
     )
 
 }
