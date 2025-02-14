@@ -6,7 +6,7 @@ canvas.width = 448;
 
 const sprite = document.getElementById ("sprite");
 const mur = document.getElementById ("murs");
-const ball = document.getElementById ("balls")
+let ball = document.getElementById("balls")
 
 
 let colors = ["#CD5C5C", "#F08080", "#FA8072", "#E9967A", "#8B0000"]
@@ -60,6 +60,7 @@ let palaX = (canvas.width - amplePala) / 2 ;
 let palaY = canvas.height - alturaPala - 10 ;
 
 let vidas = 3
+let nivel = 1
 
 function pintarPilota (){
     /*ctx.beginPath();
@@ -122,6 +123,7 @@ function pintarMurs (){
            // ctx.rect(murActual.x,murActual.y,ampleMur,alturaMur)
             //ctx.fill();
         }
+
     }
 }
 function deteccioColisio () {
@@ -237,6 +239,45 @@ function inicialitzadorEvents (){
 }
 }
 
+function pujarNivell() {
+    let mursdestruits = true;
+
+    for (let c = 0; c < columnes; c++) {
+        for (let f = 0; f < filas; f++) {
+            if (murs[c][f].status !== ESTAT_MUR.DESTRUIT) {
+                mursdestruits = false;
+                break;
+            }
+        }
+        if (!mursdestruits) break;
+    }
+
+    if (mursdestruits) {
+        nivel++;
+        setTimeout(() => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.font = "40px Verdana";
+            ctx.fillText(`Level ${nivel}`, canvas.width / 2 - 60, canvas.height / 2);
+            setTimeout(() => {
+                inicializarMurs();
+            }, 1000);
+        }, 500);
+    }
+}
+
+function inicializarMurs() {
+    for (let c = 0; c < columnes; c++) {
+        for (let f = 0; f < filas; f++) {
+            murs[c][f] = {
+                x: c * ampleMur,
+                y: f * alturaMur,
+                status: ESTAT_MUR.SHOW,
+            };
+        }
+    }
+}
+
 function pintarCanvas(){
     console.log("Hi");
     borrarPantalla ();
@@ -247,7 +288,12 @@ function pintarCanvas(){
     movimentPilota();
     movimentPala();
     ctx.fillText("Vidas: " +vidas ,12,12);
+    ctx.fillText("Nivel: " +nivel ,12,24);
     window.requestAnimationFrame(pintarCanvas);
 }
 pintarCanvas();
 inicialitzadorEvents();
+
+document.getElementById("pilotes").addEventListener("click",function(){
+    ball.src = document.getElementById("pilota").value
+})
